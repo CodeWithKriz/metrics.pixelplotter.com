@@ -1,1 +1,1 @@
-# [metrics.pixelplotter.com](https://codewithkriz.github.io/pixelplotter-metrics/)
+# [pixelplotter-metrics site](https://codewithkriz.github.io/pixelplotter-metrics/)
