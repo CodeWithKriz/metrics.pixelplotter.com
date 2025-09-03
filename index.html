@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xfinity Loyalty Program Name Test - Visual Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .chart-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .insight {
+            font-size: 0.875rem;
+            color: #4b5563;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800">Xfinity Loyalty Program Name Test</h1>
+            <p class="mt-2 text-lg text-gray-600">Visual Insights from Survey Data</p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+            <!-- Visualization 1: Most Preferred Name (The Big Winner) -->
+            <div class="chart-card md:col-span-2 lg:col-span-3 xl:col-span-4">
+                <h2 class="text-xl font-semibold text-center text-gray-700">"Xfinity Rewards" is the Overwhelming Favorite</h2>
+                <canvas id="mostPreferredChart"></canvas>
+                <p class="insight">Over half of all respondents chose "Xfinity Rewards" as their most preferred name, more than doubling its closest competitor.</p>
+            </div>
+
+            <!-- Visualization 2: Least Preferred Name -->
+            <div class="chart-card md:col-span-2">
+                <h2 class="text-xl font-semibold text-center text-gray-700">"Member" & "Membership" Are Most Often Rejected</h2>
+                 <canvas id="leastPreferredChart"></canvas>
+                 <p class="insight">"Member" and "Membership" are frequently rejected for being too generic. "Rewards" is the safest option with the fewest rejections.</p>
+            </div>
+
+            <!-- Visualization 3: Net Preference Score -->
+             <div class="chart-card md:col-span-2">
+                <h2 class="text-xl font-semibold text-center text-gray-700">Net Preference: A Clear Picture</h2>
+                 <canvas id="netPreferenceChart"></canvas>
+                 <p class="insight">"Rewards" has a massive positive score (Most Preferred minus Least Preferred), while "VIP" is polarizing (net negative) and the "Member" options are strongly disliked.</p>
+            </div>
+            
+            <!-- Visualization 4: Key Perception Metrics -->
+            <div class="chart-card md:col-span-2 lg:col-span-3 xl:col-span-4">
+                <h2 class="text-xl font-semibold text-center text-gray-700">Core Perception Metrics (Top-2 Box %)</h2>
+                <canvas id="perceptionMetricsChart"></canvas>
+                <p class="insight">"Rewards" consistently leads in clarity and likelihood to be clicked, reinforcing its strength as a clear call-to-action.</p>
+            </div>
+
+            <!-- Visualization 5: Impact on Brand Consideration -->
+            <div class="chart-card md:col-span-2">
+                <h2 class="text-xl font-semibold text-center text-gray-700">Impact on Brand Consideration</h2>
+                <canvas id="considerationChart"></canvas>
+                <p class="insight">Despite lower preference, "Membership" performs well in isolation on consideration. However, all names have a broadly similar, positive impact.</p>
+            </div>
+
+            <!-- Visualization 6: Impact on Retention -->
+            <div class="chart-card md:col-span-2">
+                <h2 class="text-xl font-semibold text-center text-gray-700">Impact on Customer Retention</h2>
+                <canvas id="retentionChart"></canvas>
+                <p class="insight">The name alone has a modest and very similar impact on retention across the board, suggesting the program's benefits will be the real driver.</p>
+            </div>
+
+            <!-- Visualization 7: Customer vs. Prospect Agreement -->
+            <div class="chart-card md:col-span-2 lg:col-span-4">
+                <h2 class="text-xl font-semibold text-center text-gray-700">Customers & Prospects Agree: "Rewards" is #1</h2>
+                <canvas id="customerProspectChart"></canvas>
+                <p class="insight">Both existing customers and potential new customers strongly prefer "Xfinity Rewards," indicating its appeal across the entire marketing funnel.</p>
+            </div>
+
+            <!-- Visualization 8-11: Word Clouds from Open-Ends -->
+            <div class="chart-card text-center">
+                <h2 class="text-xl font-semibold text-gray-700">Why People Like "Rewards"</h2>
+                <div class="p-4 flex items-center justify-center">
+                    <div class="text-3xl font-bold text-blue-600">Clear</div>
+                    <div class="text-xl ml-4 text-gray-500">Straightforward</div>
+                    <div class="text-2xl ml-4 font-semibold text-blue-500">Value</div>
+                    <div class="text-lg ml-2 text-gray-500">Simple</div>
+                </div>
+                 <p class="insight">Clarity and value are the key drivers of preference for "Rewards."</p>
+            </div>
+
+            <div class="chart-card text-center">
+                <h2 class="text-xl font-semibold text-gray-700">The "VIP" Appeal</h2>
+                <div class="p-4 flex items-center justify-center">
+                    <div class="text-3xl font-bold text-purple-600">Exclusive</div>
+                    <div class="text-xl ml-4 text-gray-500">Important</div>
+                    <div class="text-2xl ml-4 font-semibold text-purple-500">Special</div>
+                    <div class="text-lg ml-2 text-gray-500">Premium</div>
+                </div>
+                <p class="insight">"VIP" attracts users who desire a feeling of exclusivity and importance.</p>
+            </div>
+            
+            <div class="chart-card text-center">
+                <h2 class="text-xl font-semibold text-gray-700">The "VIP" Backlash</h2>
+                <div class="p-4 flex items-center justify-center">
+                    <div class="text-3xl font-bold text-red-600">Pay Extra</div>
+                    <div class="text-xl ml-4 text-gray-500">Not for me</div>
+                     <div class="text-2xl ml-4 font-semibold text-red-500">Alienating</div>
+                    <div class="text-lg ml-2 text-gray-500">Snobby</div>
+                </div>
+                 <p class="insight">However, it alienates others who feel it implies extra cost or exclusivity they aren't part of.</p>
+            </div>
+
+            <div class="chart-card text-center">
+                <h2 class="text-xl font-semibold text-gray-700">Why "Member" Fails</h2>
+                <div class="p-4 flex items-center justify-center">
+                    <div class="text-3xl font-bold text-gray-600">Generic</div>
+                    <div class="text-xl ml-4 text-gray-500">Boring</div>
+                    <div class="text-2xl ml-4 font-semibold text-gray-500">Vague</div>
+                    <div class="text-lg ml-2 text-gray-400">Unclear</div>
+                </div>
+                 <p class="insight">The "Member" and "Membership" names are seen as indistinct and fail to communicate a clear benefit.</p>
+            </div>
+        </main>
+    </div>
+
+<script>
+    // --- DATA ---
+    // This data is pre-aggregated from the survey file to support the visualizations.
+    const nameLabels = ['Rewards', 'VIP', 'Membership', 'Member'];
+    const colors = {
+        rewards: 'rgba(59, 130, 246, 0.8)',
+        vip: 'rgba(139, 92, 246, 0.8)',
+        membership: 'rgba(234, 179, 8, 0.8)',
+        member: 'rgba(107, 114, 128, 0.8)',
+        prospect: 'rgba(16, 185, 129, 0.8)'
+    };
+    
+    const mostPreferredData = {
+        labels: nameLabels,
+        counts: [615, 288, 142, 155]
+    };
+
+    const leastPreferredData = {
+        labels: nameLabels,
+        counts: [134, 307, 356, 403]
+    };
+    
+    const netPreferenceData = {
+        labels: nameLabels,
+        scores: [
+            mostPreferredData.counts[0] - leastPreferredData.counts[0], // Rewards
+            mostPreferredData.counts[1] - leastPreferredData.counts[1], // VIP
+            mostPreferredData.counts[2] - leastPreferredData.counts[2], // Membership
+            mostPreferredData.counts[3] - leastPreferredData.counts[3]  // Member
+        ]
+    };
+
+    const perceptionData = {
+        labels: nameLabels,
+        appeal: [69.3, 67.3, 60.0, 54.7],
+        clarity: [78.0, 76.7, 70.0, 69.0],
+        clickIntent: [66.3, 58.0, 60.7, 55.0]
+    };
+    
+    const considerationData = {
+        labels: nameLabels,
+        percentages: [57.7, 57.3, 62.3, 55.3]
+    };
+
+    const retentionData = {
+        labels: nameLabels,
+        percentages: [32.7, 32.0, 30.7, 30.7]
+    };
+
+    const customerProspectData = {
+        labels: nameLabels,
+        customers: [318, 140, 67, 75], // Estimated from summary
+        prospects: [297, 148, 75, 80] // Estimated from summary
+    };
+
+    // --- CHART CONFIG & RENDERING ---
+    document.addEventListener('DOMContentLoaded', () => {
+        Chart.register(ChartDataLabels);
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.plugins.legend.position = 'bottom';
+        Chart.defaults.plugins.datalabels.anchor = 'end';
+        Chart.defaults.plugins.datalabels.align = 'end';
+        Chart.defaults.plugins.datalabels.formatter = (value) => value.toLocaleString();
+        Chart.defaults.plugins.datalabels.color = '#374151';
+
+        // Most Preferred Chart
+        new Chart(document.getElementById('mostPreferredChart'), {
+            type: 'bar',
+            data: {
+                labels: mostPreferredData.labels,
+                datasets: [{
+                    label: 'Most Preferred Picks',
+                    data: mostPreferredData.counts,
+                    backgroundColor: [colors.rewards, colors.vip, colors.membership, colors.member]
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: { x: { beginAtZero: true } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Least Preferred Chart
+        new Chart(document.getElementById('leastPreferredChart'), {
+            type: 'bar',
+            data: {
+                labels: leastPreferredData.labels,
+                datasets: [{
+                    label: 'Least Preferred Picks',
+                    data: leastPreferredData.counts,
+                    backgroundColor: ['#ef4444', '#ef4444', '#ef4444', '#ef4444']
+                }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } },
+                plugins: { legend: { display: false } }
+            }
+        });
+        
+        // Net Preference Chart
+        new Chart(document.getElementById('netPreferenceChart'), {
+            type: 'bar',
+            data: {
+                labels: netPreferenceData.labels,
+                datasets: [{
+                    label: 'Net Preference Score (Most - Least)',
+                    data: netPreferenceData.scores,
+                    backgroundColor: netPreferenceData.scores.map(score => score > 0 ? colors.rewards : '#ef4444')
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: { x: { beginAtZero: false } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Perception Metrics Chart
+        new Chart(document.getElementById('perceptionMetricsChart'), {
+            type: 'bar',
+            data: {
+                labels: perceptionData.labels,
+                datasets: [
+                    { label: 'Appeal %', data: perceptionData.appeal, backgroundColor: colors.rewards },
+                    { label: 'Clarity %', data: perceptionData.clarity, backgroundColor: colors.prospect },
+                    { label: 'Click Intent %', data: perceptionData.clickIntent, backgroundColor: colors.member }
+                ]
+            },
+            options: {
+                scales: { y: { beginAtZero: true, max: 100, ticks: { callback: (value) => value + '%' } } },
+                plugins: { datalabels: { formatter: (value) => value + '%' } }
+            }
+        });
+
+        // Consideration Chart
+        new Chart(document.getElementById('considerationChart'), {
+            type: 'bar',
+            data: {
+                labels: considerationData.labels,
+                datasets: [{
+                    label: '% Top-2 Box Consideration',
+                    data: considerationData.percentages,
+                    backgroundColor: [colors.rewards, colors.vip, colors.membership, colors.member]
+                }]
+            },
+             options: {
+                indexAxis: 'y',
+                scales: { x: { beginAtZero: true, max: 100, ticks: { callback: (value) => value + '%' } } },
+                plugins: { legend: { display: false }, datalabels: { formatter: (value) => value + '%' } }
+            }
+        });
+
+        // Retention Chart
+        new Chart(document.getElementById('retentionChart'), {
+            type: 'bar',
+            data: {
+                labels: retentionData.labels,
+                datasets: [{
+                    label: '% More Likely to Stay',
+                    data: retentionData.percentages,
+                    backgroundColor: [colors.rewards, colors.vip, colors.membership, colors.member]
+                }]
+            },
+             options: {
+                indexAxis: 'y',
+                scales: { x: { beginAtZero: true, max: 40, ticks: { callback: (value) => value + '%' } } },
+                plugins: { legend: { display: false }, datalabels: { formatter: (value) => value + '%' } }
+            }
+        });
+
+        // Customer vs. Prospect Chart
+        new Chart(document.getElementById('customerProspectChart'), {
+            type: 'bar',
+            data: {
+                labels: customerProspectData.labels,
+                datasets: [
+                    { label: 'Customers', data: customerProspectData.customers, backgroundColor: colors.rewards },
+                    { label: 'Prospects', data: customerProspectData.prospects, backgroundColor: colors.prospect }
+                ]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    });
+</script>
+</body>
+</html>
