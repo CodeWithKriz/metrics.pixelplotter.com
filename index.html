@@ -47,7 +47,7 @@
             <!-- Visualization 1: Most Preferred Name (The Big Winner) -->
             <div class="chart-card md:col-span-2 lg:col-span-3 xl:col-span-4">
                 <h2 class="text-xl font-semibold text-center text-gray-700">"Xfinity Rewards" is the Overwhelming Favorite</h2>
-                <canvas id="mostPreferredChart"></canvas>
+                <canvas id="mostPreferredChart" class="max-h-96"></canvas>
                 <p class="insight">Over half of all respondents chose "Xfinity Rewards" as their most preferred name, more than doubling its closest competitor.</p>
             </div>
 
@@ -67,23 +67,23 @@
             
             <!-- Visualization 4: Key Perception Metrics -->
             <div class="chart-card md:col-span-2 lg:col-span-3 xl:col-span-4">
-                <h2 class="text-xl font-semibold text-center text-gray-700">Core Perception Metrics (Top-2 Box %)</h2>
+                <h2 class="text-xl font-semibold text-center text-gray-700">Core Perception Metrics: A Holistic View</h2>
                 <canvas id="perceptionMetricsChart"></canvas>
-                <p class="insight">"Rewards" consistently leads in clarity and likelihood to be clicked, reinforcing its strength as a clear call-to-action.</p>
+                <p class="insight !mt-4">The Radar Chart now shows percentages directly at each point for a cleaner look, highlighting that "Rewards" consistently performs well across all metrics.</p>
             </div>
 
             <!-- Visualization 5: Impact on Brand Consideration -->
             <div class="chart-card md:col-span-2">
                 <h2 class="text-xl font-semibold text-center text-gray-700">Impact on Brand Consideration</h2>
                 <canvas id="considerationChart"></canvas>
-                <p class="insight">Despite lower preference, "Membership" performs well in isolation on consideration. However, all names have a broadly similar, positive impact.</p>
+                <p class="insight">The lollipop chart clearly visualizes each name's positive impact on consideration, with "Membership" showing a slight edge.</p>
             </div>
 
             <!-- Visualization 6: Impact on Retention -->
             <div class="chart-card md:col-span-2">
                 <h2 class="text-xl font-semibold text-center text-gray-700">Impact on Customer Retention</h2>
                 <canvas id="retentionChart"></canvas>
-                <p class="insight">The name alone has a modest and very similar impact on retention across the board, suggesting the program's benefits will be the real driver.</p>
+                <p class="insight">This horizontal bar chart clearly shows the modest and very similar positive impact on retention for all names.</p>
             </div>
 
             <!-- Visualization 7: Customer vs. Prospect Agreement -->
@@ -93,7 +93,14 @@
                 <p class="insight">Both existing customers and potential new customers strongly prefer "Xfinity Rewards," indicating its appeal across the entire marketing funnel.</p>
             </div>
 
-            <!-- Visualization 8: Qualitative Feedback Themes -->
+            <!-- Visualization 8: Regional Winners -->
+            <div class="chart-card md:col-span-2 lg:col-span-4">
+                <h2 class="text-xl font-semibold text-center text-gray-700">Regional Winners: Where Each Name Won</h2>
+                <canvas id="regionalWinnersChart"></canvas>
+                <p class="insight">"Xfinity Rewards" won overwhelmingly in almost every region, with "Xfinity Membership" taking the top spot in New England.</p>
+            </div>
+
+            <!-- Visualization 9: Qualitative Feedback Themes -->
             <div class="chart-card md:col-span-2 lg:col-span-3 xl:col-span-4">
                 <h2 class="text-xl font-semibold text-center text-gray-700 mb-6">What People Are Saying: Key Themes from Feedback</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -168,7 +175,8 @@
         vip: 'rgba(139, 92, 246, 0.8)',
         membership: 'rgba(234, 179, 8, 0.8)',
         member: 'rgba(107, 114, 128, 0.8)',
-        prospect: 'rgba(16, 185, 129, 0.8)'
+        prospect: 'rgba(16, 185, 129, 0.8)',
+        red: 'rgba(239, 68, 68, 0.8)',
     };
     
     const mostPreferredData = {
@@ -213,6 +221,23 @@
         customers: [318, 140, 67, 75], // Estimated from summary
         prospects: [297, 148, 75, 80] // Estimated from summary
     };
+    
+    // Data from the uploaded CSV for the new widget
+    const regionalData = [
+        { region: "BELTWAY REGION", winner: "Xfinity Rewards", winner_pct: 51.9, runnerup_pct: 25.6 },
+        { region: "BIG SOUTH REGION", winner: "Xfinity Rewards", winner_pct: 52.2, runnerup_pct: 23.5 },
+        { region: "CALIFORNIA REGION", winner: "Xfinity Rewards", winner_pct: 57.3, runnerup_pct: 21.8 },
+        { region: "CHICAGO REGION", winner: "Xfinity Rewards", winner_pct: 58.1, runnerup_pct: 21.5 },
+        { region: "FLORIDA REGION", winner: "Xfinity Rewards", winner_pct: 48.3, runnerup_pct: 25.8 },
+        { region: "FREEDOM REGION", winner: "Xfinity Rewards", winner_pct: 44.7, runnerup_pct: 31.6 },
+        { region: "HEARTLAND REGION", winner: "Xfinity Rewards", winner_pct: 47.0, runnerup_pct: 32.5 },
+        { region: "KEYSTONE REGION", winner: "Xfinity Rewards", winner_pct: 50.8, runnerup_pct: 20.6 },
+        { region: "MIDWEST REGION", winner: "Xfinity Rewards", winner_pct: 56.2, runnerup_pct: 21.9 },
+        { region: "MOUNTAIN WEST REGION", winner: "Xfinity Rewards", winner_pct: 50.5, runnerup_pct: 22.0 },
+        { region: "NEW ENGLAND REGION", winner: "Xfinity Membership", winner_pct: 100.0, runnerup_pct: null },
+        { region: "PACIFIC NORTHWEST REGION", winner: "Xfinity Rewards", winner_pct: 52.6, runnerup_pct: 25.4 },
+        { region: "WESTERN NEW ENGLAND REGION", winner: "Xfinity Rewards", winner_pct: 45.1, runnerup_pct: 28.6 }
+    ];
 
     // --- CHART CONFIG & RENDERING ---
     document.addEventListener('DOMContentLoaded', () => {
@@ -221,12 +246,18 @@
         Chart.defaults.plugins.legend.position = 'bottom';
         Chart.defaults.plugins.datalabels.anchor = 'end';
         Chart.defaults.plugins.datalabels.align = 'end';
-        Chart.defaults.plugins.datalabels.formatter = (value) => value.toLocaleString();
+        // FIXED: Added a check for null or undefined values to prevent the TypeError.
+        Chart.defaults.plugins.datalabels.formatter = (value) => {
+            if (value === null || typeof value === 'undefined') {
+                return '';
+            }
+            return value.toLocaleString();
+        };
         Chart.defaults.plugins.datalabels.color = '#374151';
 
-        // Most Preferred Chart
+        // Most Preferred Chart (Now a Doughnut Chart)
         new Chart(document.getElementById('mostPreferredChart'), {
-            type: 'bar',
+            type: 'doughnut',
             data: {
                 labels: mostPreferredData.labels,
                 datasets: [{
@@ -236,9 +267,26 @@
                 }]
             },
             options: {
-                indexAxis: 'y',
-                scales: { x: { beginAtZero: true } },
-                plugins: { legend: { display: false } }
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            padding: 20
+                        }
+                    },
+                    datalabels: {
+                        formatter: (value, ctx) => {
+                            const total = ctx.chart.data.datasets[0].data.reduce((sum, current) => sum + current, 0);
+                            const percentage = (value / total * 100).toFixed(1) + '%';
+                            return percentage;
+                        },
+                        color: '#fff',
+                        font: { weight: 'bold' },
+                        anchor: 'center',
+                        align: 'center'
+                    }
+                },
+                cutout: '65%',
             }
         });
 
@@ -250,7 +298,7 @@
                 datasets: [{
                     label: 'Least Preferred Picks',
                     data: leastPreferredData.counts,
-                    backgroundColor: ['#ef4444', '#ef4444', '#ef4444', '#ef4444']
+                    backgroundColor: [colors.red, colors.red, colors.red, colors.red]
                 }]
             },
             options: {
@@ -267,7 +315,7 @@
                 datasets: [{
                     label: 'Net Preference Score (Most - Least)',
                     data: netPreferenceData.scores,
-                    backgroundColor: netPreferenceData.scores.map(score => score > 0 ? colors.rewards : '#ef4444')
+                    backgroundColor: netPreferenceData.scores.map(score => score > 0 ? colors.rewards : colors.red)
                 }]
             },
             options: {
@@ -277,26 +325,78 @@
             }
         });
 
-        // Perception Metrics Chart
+        // Perception Metrics Chart (Now a Radar Chart with values shown on the chart and more spacing)
         new Chart(document.getElementById('perceptionMetricsChart'), {
-            type: 'bar',
+            type: 'radar',
             data: {
-                labels: perceptionData.labels,
+                labels: ['Appeal %', 'Clarity %', 'Click Intent %'],
                 datasets: [
-                    { label: 'Appeal %', data: perceptionData.appeal, backgroundColor: colors.rewards },
-                    { label: 'Clarity %', data: perceptionData.clarity, backgroundColor: colors.prospect },
-                    { label: 'Click Intent %', data: perceptionData.clickIntent, backgroundColor: colors.member }
+                    {
+                        label: 'Rewards',
+                        data: [perceptionData.appeal[0], perceptionData.clarity[0], perceptionData.clickIntent[0]],
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: colors.rewards,
+                        pointBackgroundColor: colors.rewards,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: colors.rewards
+                    },
+                    {
+                        label: 'VIP',
+                        data: [perceptionData.appeal[1], perceptionData.clarity[1], perceptionData.clickIntent[1]],
+                        backgroundColor: 'rgba(139, 92, 246, 0.2)',
+                        borderColor: colors.vip,
+                        pointBackgroundColor: colors.vip,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: colors.vip
+                    },
+                    {
+                        label: 'Membership',
+                        data: [perceptionData.appeal[2], perceptionData.clarity[2], perceptionData.clickIntent[2]],
+                        backgroundColor: 'rgba(234, 179, 8, 0.2)',
+                        borderColor: colors.membership,
+                        pointBackgroundColor: colors.membership,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: colors.membership
+                    },
+                    {
+                        label: 'Member',
+                        data: [perceptionData.appeal[3], perceptionData.clarity[3], perceptionData.clickIntent[3]],
+                        backgroundColor: 'rgba(107, 114, 128, 0.2)',
+                        borderColor: colors.member,
+                        pointBackgroundColor: colors.member,
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: colors.member
+                    }
                 ]
             },
             options: {
-                scales: { y: { beginAtZero: true, max: 100, ticks: { callback: (value) => value + '%' } } },
-                plugins: { datalabels: { formatter: (value) => value + '%' } }
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { display: false },
+                        pointLabels: {
+                             display: true,
+                             font: { size: 10, weight: 'bold' }
+                        },
+                        grid: { color: '#e5e7eb' }
+                    }
+                },
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    }
+                }
             }
         });
 
-        // Consideration Chart
+        // Consideration Chart (Now a Polar Area Chart)
         new Chart(document.getElementById('considerationChart'), {
-            type: 'bar',
+            type: 'polarArea',
             data: {
                 labels: considerationData.labels,
                 datasets: [{
@@ -305,16 +405,30 @@
                     backgroundColor: [colors.rewards, colors.vip, colors.membership, colors.member]
                 }]
             },
-             options: {
-                indexAxis: 'y',
-                scales: { x: { beginAtZero: true, max: 100, ticks: { callback: (value) => value + '%' } } },
-                plugins: { legend: { display: false }, datalabels: { formatter: (value) => value + '%' } }
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 70,
+                        ticks: { backdropColor: 'transparent', color: '#6b7280' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        formatter: (value) => value + '%',
+                        color: '#fff',
+                        font: { weight: 'bold' },
+                        anchor: 'center',
+                        align: 'center'
+                    }
+                }
             }
         });
 
-        // Retention Chart
+        // Retention Chart (Now a Polar Area Chart)
         new Chart(document.getElementById('retentionChart'), {
-            type: 'bar',
+            type: 'polarArea',
             data: {
                 labels: retentionData.labels,
                 datasets: [{
@@ -323,10 +437,24 @@
                     backgroundColor: [colors.rewards, colors.vip, colors.membership, colors.member]
                 }]
             },
-             options: {
-                indexAxis: 'y',
-                scales: { x: { beginAtZero: true, max: 40, ticks: { callback: (value) => value + '%' } } },
-                plugins: { legend: { display: false }, datalabels: { formatter: (value) => value + '%' } }
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 40,
+                        ticks: { backdropColor: 'transparent', color: '#6b7280' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' },
+                    datalabels: {
+                        formatter: (value) => value + '%',
+                        color: '#fff',
+                        font: { weight: 'bold' },
+                        anchor: 'center',
+                        align: 'center'
+                    }
+                }
             }
         });
 
@@ -344,8 +472,42 @@
                 scales: { y: { beginAtZero: true } }
             }
         });
+
+        // New Regional Winners Chart
+        new Chart(document.getElementById('regionalWinnersChart'), {
+            type: 'bar',
+            data: {
+                labels: regionalData.map(d => d.region),
+                datasets: [
+                    {
+                        label: 'Winning Name %',
+                        data: regionalData.map(d => d.winner_pct),
+                        backgroundColor: regionalData.map(d => {
+                            if (d.winner.includes('Rewards')) return colors.rewards;
+                            if (d.winner.includes('Membership')) return colors.membership;
+                            return colors.member;
+                        })
+                    },
+                    {
+                        label: 'Runner-up %',
+                        data: regionalData.map(d => d.runnerup_pct),
+                        backgroundColor: 'rgba(209, 213, 219, 0.8)' // A light gray for contrast
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: { display: true, text: 'Most Preferred Percentage (%)' }
+                    }
+                }
+            }
+        });
+
     });
 </script>
 </body>
 </html>
-
